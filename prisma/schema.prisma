@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model EmailAccount {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  imapServer   String
+  imapPort     Int
+  smtpServer   String
+  smtpPort     Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  emails       Email[]
+}
+
+model Email {
+  id           String   @id @default(cuid())
+  messageId    String?
+  subject      String
+  from         String
+  to           String
+  cc           String?
+  bcc          String?
+  body         String
+  htmlBody     String?
+  attachments  String?  // JSON string array of attachment filenames
+  folder       String   @default("inbox") // inbox, sent, draft, trash
+  isRead       Boolean  @default(false)
+  isStarred    Boolean  @default(false)
+  receivedAt   DateTime
+  sentAt       DateTime?
+  accountId    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  account      EmailAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  
+  @@index([accountId, folder])
+  @@index([receivedAt])
+}
