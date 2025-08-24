@@ -772,7 +772,7 @@ export default function Home() {
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                多账号邮件客户端HH@by测试组🟢Steven
+                多账号邮箱HH@by测试组🟢Steven
               </h1>
               <p className="text-sm text-gray-600">多账号邮件管理系统</p>
             </div>
